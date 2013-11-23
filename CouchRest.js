@@ -19,6 +19,8 @@ var CouchRest = function(config) {
 CouchRest.prototype.fetch = function(collection, opts, callback) {
     var _this = this;
     var db = new Pouch(collection);
+    var remote = this.config.couchUrl + collection;
+
     if(typeof opts === 'function') {
         callback = opts;
         opts = {};
@@ -45,6 +47,8 @@ CouchRest.prototype.save = function(collection, doc, opts, callback) {
     // the couch and replicating to the server
     var _this = this;
     var db = new Pouch(collection);
+    var remote = this.config.couchUrl + collection;
+
     if(typeof opts === 'function') {
         callback = opts;
         opts = {};
@@ -52,7 +56,7 @@ CouchRest.prototype.save = function(collection, doc, opts, callback) {
 
     db.post(doc, opts, function(err, res) {
         if(!_this.offline) {
-            db.replicate.to(_this.config.couchUrl + collection);
+            db.replicate.to(remote);
         }
 
         callback(err, res);
@@ -89,8 +93,10 @@ CouchRest.prototype.sync = function() {
     Pouch.allDbs(function(err, response) {
         jQuery.each(response, function(index, collection) {
             var db = new Pouch(collection);
-            db.replicate.from(_this.config.couchUrl + collection);
-            db.replicate.to(_this.config.couchUrl + collection);
+            var remote = this.config.couchUrl + collection;
+
+            db.replicate.from(remote);
+            db.replicate.to(remote);
         });
     });
 };
