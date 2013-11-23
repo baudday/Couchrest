@@ -2,8 +2,6 @@ var CouchRest = function(config) {
     var _this = this;
     this.config = config;
     this.status();
-
-    if(!this.offline) this.sync();
 };
 
 /*
