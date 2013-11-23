@@ -30,15 +30,11 @@ CouchRest.prototype.fetch = function(collection, opts, callback) {
     if(this.offline) {
         db.allDocs(opts, callback);
     } else { // Get the freshest data if we're online
-        this.replicate(
-            this.config.couchUrl + collection, 
-            collection,
-            {
-                complete: function() {
-                    db.allDocs(opts, callback);
-                }
+        db.replicate.from(remote, {
+            complete: function() {
+                db.allDocs(opts, callback);
             }
-        );
+        });
     }
 };
 
