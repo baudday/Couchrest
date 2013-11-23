@@ -96,3 +96,30 @@ CouchRest.prototype.sync = function() {
         });
     });
 };
+
+// All fields required
+CouchRest.prototype.query = function(collection, query, rep, callback) {
+    var db = new Pouch(collection);
+    var remote = this.config.couchUrl + collection;
+
+    if(!query.opts) query.opts = {};
+
+    if(this.offline) {
+        // Query pouch
+        db.query(query.fun, query.opts, callback);
+    } else {
+        // Replicate from server
+        db.replicate.from(remote, {
+            filter: rep.opts.filter,
+
+            complete: (
+                (rep.opts.complete) ?
+                    rep.opts.complete :
+                    function() {
+                        // Return results
+                        db.query(query.fun, query.opts, callback);
+                    }
+            )
+        });
+    }
+};
