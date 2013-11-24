@@ -1,7 +1,6 @@
 var CouchRest = function(config) {
     var _this = this;
     this.config = config;
-    this.status();
 };
 
 /*
