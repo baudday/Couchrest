@@ -76,7 +76,6 @@ CouchRest.prototype.status = function(callback) {
     jQuery.ajax({
         url: _this.config.apiUrl + '/status',
         timeout: 1000,
-        async: false,
         complete: function(res) {
             window.offline = _this.offline = res.status === 200 ? false : true;
             console.log(
