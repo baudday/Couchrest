@@ -64,7 +64,14 @@ CouchRest.prototype.replicate = function(source, target, opts) {
     Pouch.replicate(source, target, opts);
 };
 
-CouchRest.prototype.status = function() {
+CouchRest.prototype.replicateFrom = function(collection, opts) {
+    var remote = this.config.couchUrl + collection;
+    var db = new Pouch(collection);
+
+    db.replicate.from(remote, opts);
+};
+
+CouchRest.prototype.status = function(callback) {
     var _this = this;
     jQuery.ajax({
         url: _this.config.apiUrl + '/status',
