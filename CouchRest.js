@@ -77,11 +77,13 @@ CouchRest.prototype.status = function(callback) {
         url: _this.config.apiUrl + '/status',
         timeout: 1000,
         complete: function(res) {
-            window.offline = _this.offline = res.status === 200 ? false : true;
+            _this.offline = res.status === 200 ? false : true;
             console.log(
-                "Status:",
-                window.offline === false ? "online" : "offline"
+                "CouchRest Status:",
+                _this.offline === false ? "online" : "offline"
             );
+
+            if(callback) callback();
         }
     });
 };
