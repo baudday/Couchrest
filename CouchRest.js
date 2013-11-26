@@ -1,6 +1,7 @@
 var CouchRest = function(config) {
     var _this = this;
     this.config = config;
+    this.offline = true; // Init as false just in case
 };
 
 /*
