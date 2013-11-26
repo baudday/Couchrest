@@ -129,15 +129,19 @@ CouchRest.prototype.status = function(callback) {
     });
 };
 
-CouchRest.prototype.sync = function() {
+CouchRest.prototype.syncToRemote = function(omit) {
     var _this = this;
+    if(!omit) omit = new Array();
 
+    PouchDB.enableAllDbs = true;
     Pouch.allDbs(function(err, response) {
         jQuery.each(response, function(index, collection) {
-            var db = new Pouch(collection);
-            var remote = this.config.couchUrl + collection;
+            // omit the collection
+            if(omit.indexOf(collection) > -1) return true;
 
-            db.replicate.from(remote);
+            var db = new Pouch(collection);
+            var remote = _this.config.couchUrl + collection;
+
             db.replicate.to(remote);
         });
     });
