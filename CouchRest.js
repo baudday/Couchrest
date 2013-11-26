@@ -65,17 +65,18 @@ CouchRest.prototype.get = function(collection, docid, opts, callback) {
 
 CouchRest.prototype.save = function(collection, doc, opts, callback) {
     // Just a wrapper. We're always saving to 
-    // the couch and replicating to the server
+    // the pouch and replicating to the server
     var _this = this;
     var db = new Pouch(collection);
     var remote = this.config.couchUrl + collection;
+    var method = doc.hasOwnProperty('_id') ? 'put' : 'post';
 
     if(typeof opts === 'function') {
         callback = opts;
         opts = {};
     }
 
-    db.post(doc, opts, function(err, res) {
+    db[method](doc, opts, function(err, res) {
         if(!_this.offline) {
             db.replicate.to(remote);
         }
