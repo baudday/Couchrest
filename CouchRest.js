@@ -124,7 +124,7 @@ CouchRest.prototype.status = function(callback) {
                 _this.offline === false ? "online" : "offline"
             );
 
-            if(callback) callback();
+            if(callback) callback(_this.offline);
         }
     });
 };
