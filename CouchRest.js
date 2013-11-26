@@ -42,6 +42,27 @@ CouchRest.prototype.fetch = function(collection, opts, callback) {
     }
 };
 
+CouchRest.prototype.get = function(collection, docid, opts, callback) {
+    var _this = this;
+    var db = new Pouch(collection);
+    var remote = this.config.couchUrl + collection;
+
+    if(typeof opts === 'function') {
+        callback = opts;
+        opts = {};
+    }
+
+    if(this.offline) {
+        db.get(docid, opts, callback);
+    } else {
+        db.replicate.from(remote, {
+            complete: function() {
+                db.get(docid, opts, callback);
+            }
+        });
+    }
+};
+
 CouchRest.prototype.save = function(collection, doc, opts, callback) {
     // Just a wrapper. We're always saving to 
     // the couch and replicating to the server
