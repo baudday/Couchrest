@@ -16,6 +16,7 @@ var CouchRest = function(config) {
 */
 CouchRest.prototype.fetch = function(collection, opts, callback) {
     var _this = this;
+    var local = false;
     var db = new Pouch(collection);
     var remote = this.config.couchUrl + collection;
 
@@ -24,8 +25,13 @@ CouchRest.prototype.fetch = function(collection, opts, callback) {
         opts = {};
     }
 
+    if(opts.hasOwnProperty('local')) {
+        local = true;
+        delete opts.local;
+    }
+
     // Just fetch from the pouch if we're offline
-    if(this.offline) {
+    if(this.offline || local) {
         db.allDocs(opts, callback);
     } else { // Get the freshest data if we're online
         db.replicate.from(remote, {
