@@ -85,6 +85,18 @@ CouchRest.prototype.save = function(collection, doc, opts, callback) {
     });
 };
 
+CouchRest.prototype.bulkSave = function(collection, docs, opts, callback) {
+    var _this = this;
+    var db = new Pouch(collection);
+
+    if(typeof opts === 'function') {
+        callback = opts;
+        opts = {};
+    }
+
+    db.bulkDocs(docs, opts, callback);
+};
+
 CouchRest.prototype.replicate = function(source, target, opts) {
     // Also just a wrapper. Leaving it open for
     // future customization is necessary
