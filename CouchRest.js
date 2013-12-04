@@ -149,12 +149,19 @@ CouchRest.prototype.syncToRemote = function(omit) {
 
 // All fields required
 CouchRest.prototype.query = function(collection, query, rep, callback) {
+    var local = false;
     var db = new Pouch(collection);
     var remote = this.config.couchUrl + collection;
 
     if(!query.opts) query.opts = {};
+    if(typeof rep === 'function') callback = rep;
 
-    if(this.offline) {
+    if(query.opts.hasOwnProperty('local')) {
+        local = true;
+        delete query.opts.local;
+    }
+
+    if(this.offline || local || typeof rep === 'function') {
         // Query pouch
         db.query(query.fun, query.opts, callback);
     } else {
