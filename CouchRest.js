@@ -181,4 +181,4 @@ CouchRest.prototype.query = function(collection, query, rep, callback) {
     }
 };
 
-define('CouchRest', [], function() { return CouchRest});
+define('CouchRest', [], function() { return CouchRest });
