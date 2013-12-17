@@ -109,7 +109,13 @@ define("CouchRest", ["pouchdb"], function(Pouch) {
             url: _this.config.apiUrl + '/status',
             timeout: 1000,
             complete: function(res) {
-                _this.offline = res.status === 200 ? false : true;
+                window.offline = _this.offline = res.status === 200 ? false : true;
+
+                // TODO: Move out of here!
+                $("#status")
+                    .css("background", offline ? "#ff0000" : "#00ff00")
+                    .attr("title", offline ? "You are offline" : "You are online");
+
                 console.log(
                     "CouchRest Status:",
                     _this.offline === false ? "online" : "offline"
