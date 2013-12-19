@@ -178,6 +178,10 @@ define("CouchRest", ["pouchdb"], function(Pouch) {
         }
     };
 
+    CouchRest.prototype.destroy = function(collection) {
+        Pouch.destroy(collection);
+    };
+
     return CouchRest;
 });
 
