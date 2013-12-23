@@ -107,7 +107,7 @@ define("CouchRest", ["pouchdb"], function(Pouch) {
         var _this = this;
         jQuery.ajax({
             url: _this.config.apiUrl + '/status',
-            timeout: 1000,
+            timeout: 5000,
             complete: function(res) {
                 window.offline = _this.offline = res.status === 200 ? false : true;
 
